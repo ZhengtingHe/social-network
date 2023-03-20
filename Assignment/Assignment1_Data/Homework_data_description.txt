@@ -1,0 +1,37 @@
+DATA FOR THE HOMEWORKS
+
+CONTEXT. To the group homework #1 of this course, you need to work on network
+data from one of the classrooms in the "RECENS high-school study". This was a large
+longitudinal network data collection that took place in Hungary between 2010 and
+2013. In course of the study, social network surveys were administered in 43
+high-school classes a total of 4 times. The first suvey was done two months after
+the start of the first grade (when most students were 14-15 years old), the second
+half a year later. There were two additional questionnaires distributed one and
+two years after wave 2, but we do not use these later obsevations in this course. 
+
+AVAILABLE DATA. Some social network and individual variables are available for you
+to work with in the course. We selected one classroom from the original
+study.
+
+The data files you need to use are the following (they can be found in the 
+“Data for homeworks” folder):
+
+2400_affective_w1.csv - adjacency matrix for the affective relations network of wave 1
+2400_trust_w1.csv - adjacency matrix for the personal trust network of wave 1
+2400_sex.csv - data table containing a variable for the sex of students
+2400_drink.csv - data table containing one variable for drinking habits in wave 1 and
+		 another variable for drinking habits in wave 2
+
+2400 is a unique 4-digit classroom identifier.
+
+CODING. The affective relations networks come from a scale item in the survey:
+students were asked to evaluate their relationship with each of their fellow
+classmates on a scale ranging from -2 to +2. The labels can be interpreted as
+-2: enemy, -1: dislike, 0: neutral, +1: like, +2: friend. The "trust network"
+comes from an item that asked students to nominate each of their classmates
+with whom they would share an important secret (1: yes, 0: no). The sex of the
+students is coded as 1: male, 2: female. Drinking habits were measured on a 4-point
+scale, where 1 stands for "I have never tried alcohol", 2 for "I have tried it, but
+I never drink", 3 for "I drink occasionally", and 4 for "I drink at least once a
+week". For the sake of simplicity, you can view this variable as a crude continuous
+measure of the frequency of alcohol consumption whenever you use it an analysis.
