@@ -100,8 +100,13 @@ ggraph(same_gender.graph)+
 sum(same_gender)
 
 # add a measure: degree centrality, betweenness centrality
-gender_data$centrality <- sna::degree(affective_network_data.friendship, cmode = 'freeman')
+gender_data$c.degree <- sna::degree(affective_network_data.friendship, cmode = 'freeman')
+max(gender_data$c.degree)
+min(gender_data$c.degree)
+mean(gender_data$c.degree)
+
 gender_data$c.betw <- igraph::betweenness(affective_network.igraph)
+max(gender_data$c.betw)
 
 # 4.plot the friendship network ----
 edges <- geom_edge_link2(alpha = .7,
@@ -113,7 +118,7 @@ ggraph(layout.graph)+
   geom_edge_link()+
   geom_node_point(
     aes(colour = as.factor(gender_data$sex),
-        size = gender_data$centrality))+ 
+        size = gender_data$c.degree))+ 
   theme_graph() +
   labs(title = "The friendship network") +
   scale_color_discrete("Gender", labels = c("Male", "Female")) +
@@ -140,7 +145,7 @@ ggraph(mut.graph)+
   edges +
   geom_edge_link(aes(colour = as.factor(weight))) +
   geom_node_point(aes(colour = as.factor(gender_data$sex),
-                      size = gender_data$centrality)) + 
+                      size = gender_data$c.degree)) + 
   theme_graph() +
   labs(title = "The friendship and trust networks") +
   scale_color_discrete("Gender", labels = c("Male", "Female")) +
