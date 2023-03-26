@@ -10,13 +10,13 @@ library(rstudioapi)
 setwd(dirname(getActiveDocumentContext()$path)) 
 getwd()
 
-# 1.load the affective network and the gender data ----
+# (a) load the affective network and the gender data ----
 affective_network_data <- read.csv("2400_affective_w1.csv", encoding="UTF-8", header=FALSE)
 class(affective_network_data)
 affective_network_data.friendship <- data.matrix(affective_network_data)[-1,-1]
 gender_data <- read.csv('2400_sex.csv', encoding="UTF-8")
 
-# 2.recode the affective network wave 1 into a friendship network ----
+# (b) recode the affective network wave 1 into a friendship network ----
 affective_network_data.friendship[affective_network_data.friendship == 1] <- 0
 affective_network_data.friendship[affective_network_data.friendship == -1] <- 0
 affective_network_data.friendship[affective_network_data.friendship == -2] <- 0
@@ -26,7 +26,7 @@ class(affective_network_data.friendship)
 dim(affective_network_data.friendship)
 
 
-# 3.basic network descriptives for this friendship network ----
+# (c) basic network descriptives for this friendship network ----
 affective_network.igraph <- graph_from_adjacency_matrix(affective_network_data.friendship,
                                                         mode = "directed")
 affective_network.igraph
@@ -108,7 +108,7 @@ mean(gender_data$c.degree)
 gender_data$c.betw <- igraph::betweenness(affective_network.igraph)
 max(gender_data$c.betw)
 
-# 4.plot the friendship network ----
+# (d) plot the friendship network ----
 edges <- geom_edge_link2(alpha = .7,
                          arrow = arrow(length = unit(1.2, 'mm'), 
                                        type = "closed"),
@@ -126,7 +126,7 @@ ggraph(layout.graph)+
   guides(color = guide_legend(order = 1), 
          size = guide_legend(order = 2))
 
-# 5. plot trust network and friendship network together in one plot ----
+# (e) plot trust network and friendship network together in one plot ----
 trust_data <- read.csv("2400_trust_w1.csv", encoding="UTF-8", header=FALSE)
 trust_data.matrix <- data.matrix(trust_data)[-1,-1]
 mut_matrix <- affective_network_data.friendship
@@ -153,3 +153,6 @@ ggraph(mut.graph)+
   scale_edge_color_discrete("Tie type", labels = c("Friendship", "Trust", "Both")) +
   guides(color = guide_legend(order = 1), 
          size = guide_legend(order = 2))
+
+# (f) how large is the overlap between both networks
+sum(mut_matrix == 3)
