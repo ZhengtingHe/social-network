@@ -69,7 +69,7 @@ g +
   geom_node_point(aes(color = factor(member.eb)), size = 2) +
   geom_node_text(aes(label = name, color = factor(member.eb)),
                  size = 2.5, vjust = -0.5) +
-  labs(title = "The community detection in Star Wars 4-6 episodes: Edge-Betweenness") +
+  labs(title = "The community detection in Star Wars 4-6: Edge-Betweenness") +
   scale_color_discrete("Communities") +
   guides(color = guide_legend(order = 1), 
          size = guide_legend(order = 2))
@@ -93,7 +93,7 @@ g +
   geom_node_point(aes(color = factor(member.wt)), size = 2) +
   geom_node_text(aes(label = name, color = factor(member.wt)),
                  size = 2.5, vjust = -0.5) +
-  labs(title = "The community detection in Star Wars 4-6 episodes: Walktrap") +
+  labs(title = "The community detection in Star Wars 4-6: Walktrap") +
   scale_color_discrete("Communities") +
   guides(color = guide_legend(order = 1), 
          size = guide_legend(order = 2))
@@ -118,7 +118,7 @@ g +
   geom_node_point(aes(color = factor(member.lv)), size = 2) +
   geom_node_text(aes(label = name, color = factor(member.lv)),
                  size = 2.5, vjust = -0.5) +
-  labs(title = "The community detection in Star Wars 4-6 episodes: Lauvain") +
+  labs(title = "The community detection in Star Wars 4-6: Lauvain") +
   scale_color_discrete("Communities") +
   guides(color = guide_legend(order = 1), 
          size = guide_legend(order = 2))
@@ -127,3 +127,4 @@ g +
 #      vertex.label.font = 2,
 #      vertex.label.cex = 0.6,
 #      vertex.label.dist = 0.8)
+
