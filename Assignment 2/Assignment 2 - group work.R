@@ -46,44 +46,84 @@ set.seed(8)
 #   theme_graph()
 
 
-ggraph(datalarge.igraph, #data
-       layout = 'fr')+ # layout algorithm
-  geom_edge_link(color = "grey", aes(width = weight))+ # edges as straight lines (rather than e.g. curves, or bended edges)
-  geom_node_point()+
-  geom_node_text(aes(label = name), color = "red", size = 3)+
-  theme_graph()
+g <- ggraph(datalarge.igraph, layout = 'fr') + # layout algorithm
+  geom_edge_link(color = "gray89", aes(width = weight)) +
+  geom_node_point(color = "plum4", size = 2) +
+  geom_node_text(aes(label = name), color = "plum4", size = 2.5, vjust = -0.5) +
+  theme_graph()  +
+  labs(title = "The co-emergence network of characters in Star Wars 4-6 episodes") +
+  scale_edge_width_continuous("The times of co-emergence")
 
+g
 
 #### Task 2a: community detection ####
-# Edge-betweenness algorithm
+# Edge-betweenness algorithm ---------------------------------------------------
 eb <- cluster_edge_betweenness(datalarge.igraph)
-modularity(eb)
-membership(eb)
-plot(eb, datalarge.igraph,
-     vertex.size = 5,
-     vertex.label.font = 2,
-     vertex.label.cex = 0.6,
-     vertex.label.dist = 0.8)
+length(eb) # the number of community: 2
+sizes(eb) # community sizes
+member.eb <- membership(eb)
 
-# walktrap algorithm
+modularity(eb)
+
+g +
+  geom_node_point(aes(color = factor(member.eb)), size = 2) +
+  geom_node_text(aes(label = name, color = factor(member.eb)),
+                 size = 2.5, vjust = -0.5) +
+  labs(title = "The community detection in Star Wars 4-6 episodes: Edge-Betweenness") +
+  scale_color_discrete("Communities") +
+  guides(color = guide_legend(order = 1), 
+         size = guide_legend(order = 2))
+# plot(eb, datalarge.igraph,
+#      vertex.size = 5,
+#      vertex.label.font = 2,
+#      vertex.label.cex = 0.6,
+#      vertex.label.dist = 0.8)
+
+plot_dendrogram(eb)
+
+# walktrap algorithm -----------------------------------------------------------
 wt <- cluster_walktrap(datalarge.igraph)
+length(wt) # the number of community: 3
+sizes(wt) # community sizes
+member.wt <- membership(wt)
+
 modularity(wt)
-membership(wt)
-plot(wt, datalarge.igraph,
-     vertex.size = 5,
-     vertex.label.font = 2,
-     vertex.label.cex = 0.6,
-     vertex.label.dist = 0.8)
+
+g +
+  geom_node_point(aes(color = factor(member.wt)), size = 2) +
+  geom_node_text(aes(label = name, color = factor(member.wt)),
+                 size = 2.5, vjust = -0.5) +
+  labs(title = "The community detection in Star Wars 4-6 episodes: Walktrap") +
+  scale_color_discrete("Communities") +
+  guides(color = guide_legend(order = 1), 
+         size = guide_legend(order = 2))
+
+# plot(wt, datalarge.igraph,
+#      vertex.size = 5,
+#      vertex.label.font = 2,
+#      vertex.label.cex = 0.6,
+#      vertex.label.dist = 0.8)
 
 plot_dendrogram(wt)
 
-# Louvain
+# Louvain ----------------------------------------------------------------------
 lv <- cluster_louvain(datalarge.igraph)
-modularity(lv)
-membership(lv)
-plot(lv, datalarge.igraph,
-     vertex.size = 5,
-     vertex.label.font = 2,
-     vertex.label.cex = 0.6,
-     vertex.label.dist = 0.8)
+length(lv) # the number of community: 5
+sizes(lv) # community sizes
+member.lv <- membership(lv)
 
+modularity(lv)
+
+g +
+  geom_node_point(aes(color = factor(member.lv)), size = 2) +
+  geom_node_text(aes(label = name, color = factor(member.lv)),
+                 size = 2.5, vjust = -0.5) +
+  labs(title = "The community detection in Star Wars 4-6 episodes: Lauvain") +
+  scale_color_discrete("Communities") +
+  guides(color = guide_legend(order = 1), 
+         size = guide_legend(order = 2))
+# plot(lv, datalarge.igraph,
+#      vertex.size = 5,
+#      vertex.label.font = 2,
+#      vertex.label.cex = 0.6,
+#      vertex.label.dist = 0.8)
