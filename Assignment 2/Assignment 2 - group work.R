@@ -51,7 +51,7 @@ g <- ggraph(datalarge.igraph, layout = 'fr') + # layout algorithm
   geom_node_point(color = "plum4", size = 2) +
   geom_node_text(aes(label = name), color = "plum4", size = 2.5, vjust = -0.5) +
   theme_graph()  +
-  labs(title = "The co-emergence network of characters in Star Wars 4-6 episodes") +
+  labs(title = "The co-emergence network of characters in Star Wars IV-VI episodes") +
   scale_edge_width_continuous("The times of co-emergence")
 
 g
@@ -69,7 +69,7 @@ g +
   geom_node_point(aes(color = factor(member.eb)), size = 2) +
   geom_node_text(aes(label = name, color = factor(member.eb)),
                  size = 2.5, vjust = -0.5) +
-  labs(title = "The community detection in Star Wars 4-6: Edge-Betweenness") +
+  labs(title = "The community detection in Star Wars IV-VI: Edge-Betweenness") +
   scale_color_discrete("Communities") +
   guides(color = guide_legend(order = 1), 
          size = guide_legend(order = 2))
@@ -93,7 +93,7 @@ g +
   geom_node_point(aes(color = factor(member.wt)), size = 2) +
   geom_node_text(aes(label = name, color = factor(member.wt)),
                  size = 2.5, vjust = -0.5) +
-  labs(title = "The community detection in Star Wars 4-6: Walktrap") +
+  labs(title = "The community detection in Star Wars IV-VI: Walktrap") +
   scale_color_discrete("Communities") +
   guides(color = guide_legend(order = 1), 
          size = guide_legend(order = 2))
@@ -118,7 +118,7 @@ g +
   geom_node_point(aes(color = factor(member.lv)), size = 2) +
   geom_node_text(aes(label = name, color = factor(member.lv)),
                  size = 2.5, vjust = -0.5) +
-  labs(title = "The community detection in Star Wars 4-6: Lauvain") +
+  labs(title = "The community detection in Star Wars IV-VI: Lauvain") +
   scale_color_discrete("Communities") +
   guides(color = guide_legend(order = 1), 
          size = guide_legend(order = 2))
@@ -127,4 +127,36 @@ g +
 #      vertex.label.font = 2,
 #      vertex.label.cex = 0.6,
 #      vertex.label.dist = 0.8)
+
+
+### Just episode V -------------------------------------------------------------
+data5.igraph <- data.list[[5]]
+
+set.seed(13)
+
+g <- ggraph(data5.igraph, layout = 'fr') + # layout algorithm
+  geom_edge_link(color = "gray89", aes(width = weight)) +
+  geom_node_point(color = "blue4", size = 2) +
+  geom_node_text(aes(label = name), color = "blue4", size = 2.5, vjust = -0.5) +
+  theme_graph()  +
+  labs(title = "The co-emergence network of characters in Star Wars V") +
+  scale_edge_width_continuous("The times of co-emergence")
+
+eb <- cluster_edge_betweenness(data5.igraph)
+length(eb) # the number of community: 4
+sizes(eb) # community sizes
+member.eb <- membership(eb)
+
+modularity(eb)
+
+g +
+  geom_node_point(aes(color = factor(member.eb)), size = 2) +
+  geom_node_text(aes(label = name, color = factor(member.eb)),
+                 size = 2.5, vjust = -0.5) +
+  labs(title = "The community detection in Star Wars V: Edge-Betweenness") +
+  scale_color_discrete("Communities") +
+  guides(color = guide_legend(order = 1), 
+         size = guide_legend(order = 2))
+
+plot_dendrogram(eb)
 
