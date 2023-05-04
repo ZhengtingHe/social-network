@@ -27,13 +27,13 @@ subgraph_df <- do.call(rbind, subgraph_list_df)
 datalarge.igraph <- graph_from_data_frame(subgraph_df , directed = FALSE)
 # data5.igraph <- data.list[[5]] # star wars: episode 5
 
-autograph(datalarge.igraph)
+# autograph(datalarge.igraph)
 
 is.weighted(datalarge.igraph)# weight: number of the scenes where they appear together
 is.directed(datalarge.igraph)
 
 edge.attributes(datalarge.igraph)
-as.data.frame(vertex_attr(datalarge.igraph))
+vertex_attr(datalarge.igraph)
 
 set.seed(8)
 
@@ -49,7 +49,7 @@ set.seed(8)
 g <- ggraph(datalarge.igraph, layout = 'fr') + # layout algorithm
   geom_edge_link(color = "gray89", aes(width = weight)) +
   geom_node_point(color = "plum4", size = 2) +
-  geom_node_text(aes(label = name), color = "plum4", size = 2.5, vjust = -0.5) +
+  geom_node_text(aes(label = name), color = "plum4", size = 3.5, vjust = -0.5) +
   theme_graph()  +
   labs(title = "The co-emergence network of characters in Star Wars IV-VI episodes") +
   scale_edge_width_continuous("The times of co-emergence")
@@ -58,6 +58,7 @@ g
 
 #### Task 2a: community detection ####
 # Edge-betweenness algorithm ---------------------------------------------------
+## episode 4-6
 eb <- cluster_edge_betweenness(datalarge.igraph)
 length(eb) # the number of community: 2
 sizes(eb) # community sizes
@@ -68,7 +69,7 @@ modularity(eb)
 g +
   geom_node_point(aes(color = factor(member.eb)), size = 2) +
   geom_node_text(aes(label = name, color = factor(member.eb)),
-                 size = 2.5, vjust = -0.5) +
+                 size = 3.5, vjust = -0.5) +
   labs(title = "The community detection in Star Wars IV-VI: Edge-Betweenness") +
   scale_color_discrete("Communities") +
   guides(color = guide_legend(order = 1), 
@@ -92,7 +93,7 @@ modularity(wt)
 g +
   geom_node_point(aes(color = factor(member.wt)), size = 2) +
   geom_node_text(aes(label = name, color = factor(member.wt)),
-                 size = 2.5, vjust = -0.5) +
+                 size = 3.5, vjust = -0.5) +
   labs(title = "The community detection in Star Wars IV-VI: Walktrap") +
   scale_color_discrete("Communities") +
   guides(color = guide_legend(order = 1), 
@@ -117,7 +118,7 @@ modularity(lv)
 g +
   geom_node_point(aes(color = factor(member.lv)), size = 2) +
   geom_node_text(aes(label = name, color = factor(member.lv)),
-                 size = 2.5, vjust = -0.5) +
+                 size = 3.5, vjust = -0.5) +
   labs(title = "The community detection in Star Wars IV-VI: Lauvain") +
   scale_color_discrete("Communities") +
   guides(color = guide_legend(order = 1), 
@@ -134,29 +135,30 @@ data5.igraph <- data.list[[5]]
 
 set.seed(13)
 
-g <- ggraph(data5.igraph, layout = 'fr') + # layout algorithm
+g5 <- ggraph(data5.igraph, layout = 'fr') + # layout algorithm
   geom_edge_link(color = "gray89", aes(width = weight)) +
   geom_node_point(color = "blue4", size = 2) +
-  geom_node_text(aes(label = name), color = "blue4", size = 2.5, vjust = -0.5) +
+  geom_node_text(aes(label = name), color = "blue4", size = 3.5, vjust = -0.5) +
   theme_graph()  +
   labs(title = "The co-emergence network of characters in Star Wars V") +
   scale_edge_width_continuous("The times of co-emergence")
+g5
 
-eb <- cluster_edge_betweenness(data5.igraph)
-length(eb) # the number of community: 4
-sizes(eb) # community sizes
-member.eb <- membership(eb)
+eb5 <- cluster_edge_betweenness(data5.igraph)
+length(eb5) # the number of community: 4
+sizes(eb5) # community sizes
+member.eb5 <- membership(eb5)
 
-modularity(eb)
+modularity(eb5)
 
-g +
-  geom_node_point(aes(color = factor(member.eb)), size = 2) +
-  geom_node_text(aes(label = name, color = factor(member.eb)),
-                 size = 2.5, vjust = -0.5) +
+g5 +
+  geom_node_point(aes(color = factor(member.eb5)), size = 2) +
+  geom_node_text(aes(label = name, color = factor(member.eb5)),
+                 size = 3.5, vjust = -0.5) +
   labs(title = "The community detection in Star Wars V: Edge-Betweenness") +
   scale_color_discrete("Communities") +
   guides(color = guide_legend(order = 1), 
          size = guide_legend(order = 2))
 
-plot_dendrogram(eb)
+plot_dendrogram(eb5)
 
