@@ -172,3 +172,105 @@ plot_dendrogram(eb5)
 #### Task 2b: conditional uniform graph tests ####
 # feature in 1a: transtivity
 
+
+### Conditional uniform graph test---------------------------------------------
+# Create the original graph using the provided dataset
+datalarge.igraph <- graph_from_data_frame(subgraph_df , directed = FALSE)
+
+# Calculate local clustering coefficient and average path length of the original graph
+g_transitivity <- transitivity(datalarge.igraph, type = "local")
+g_mean_path_length <- mean_distance(datalarge.igraph)
+
+# Generate a random graph using the Erdős-Rényi model, where p is the edge generation probability
+p <- 2 * edge_density(datalarge.igraph)
+random_g <- erdos.renyi.game(n = vcount(datalarge.igraph), p.or.m = p, type = "gnp", directed = FALSE)
+
+# Calculate local clustering coefficient and average path length of the random graph
+random_g_transitivity <- transitivity(random_g, type = "local")
+random_g_mean_path_length <- mean_distance(random_g)
+
+# Compare the average values of local clustering coefficients
+mean_g_transitivity <- mean(g_transitivity, na.rm = TRUE)
+mean_random_g_transitivity <- mean(random_g_transitivity, na.rm = TRUE)
+
+# Calculate modularity of the original graph
+g_community <- cluster_louvain(datalarge.igraph)
+g_modularity <- modularity(g_community)
+
+
+cat("Mean local transitivity of original graph:", mean_g_transitivity, "\n")
+cat("Mean local transitivity of random graph:", mean_random_g_transitivity, "\n")
+
+# Compare the average path lengths
+cat("Mean path length of original graph:", g_mean_path_length, "\n")
+cat("Mean path length of random graph:", random_g_mean_path_length, "\n")
+
+# Repeatedly generate random graphs and calculate the differences in statistics
+n_iterations <- 50000
+mean_trans_diff <- numeric(n_iterations)
+mean_path_diff <- numeric(n_iterations)
+modularity_random <- numeric(n_iterations)
+
+for (i in 1:n_iterations) {
+  random_g <- erdos.renyi.game(n = vcount(datalarge.igraph), p.or.m = p, type = "gnp", directed = FALSE)
+  
+  random_g_transitivity <- transitivity(random_g, type = "local")
+  mean_random_g_transitivity <- mean(random_g_transitivity, na.rm = TRUE)
+  mean_trans_diff[i] <- mean_g_transitivity - mean_random_g_transitivity
+  
+  random_g_mean_path_length <- mean_distance(random_g)
+  mean_path_diff[i] <- g_mean_path_length - random_g_mean_path_length
+  
+  random_g_community <- cluster_louvain(random_g)
+  modularity_random[i] <- modularity(random_g_community)
+}
+
+# Calculate the p-value for local clustering coefficient
+p_value_trans <- sum(mean_trans_diff >= mean_g_transitivity) / n_iterations
+cat("p-value for local transitivity:", p_value_trans, "\n")
+
+# Calculate the p-value for average path length
+p_value_path <- sum(mean_path_diff >= g_mean_path_length) / n_iterations
+cat("p-value for mean path length:", p_value_path, "\n")
+
+# Calculate the p-value for modularity
+p_value_modularity <- sum(modularity_random >= g_modularity) / n_iterations
+cat("p-value for modularity:", p_value_modularity, "\n")
+
+### Plot hist
+library(ggplot2)
+
+# Local clustering coefficient histogram
+hist_trans_data <- data.frame(Local_Clustering_Coefficient_Difference = mean_trans_diff)
+ggplot(hist_trans_data, aes(x = Local_Clustering_Coefficient_Difference)) +
+  geom_histogram(binwidth = 0.01, fill = "blue", color = "black", alpha = 0.7) +
+  geom_vline(aes(xintercept = mean_random_g_transitivity),
+             color = "red", linetype = "dashed", size = 1) +
+  labs(title = "Histogram of Local Clustering Coefficient Differences",
+       x = "Difference in Local Clustering Coefficient",
+       y = "Frequency") +
+  theme_minimal()
+
+# Average path length histogram
+hist_path_data <- data.frame(Average_Path_Length_Difference = mean_path_diff)
+ggplot(hist_path_data, aes(x = Average_Path_Length_Difference)) +
+  geom_histogram(binwidth = 0.1, fill = "blue", color = "black", alpha = 0.7) +
+  geom_vline(aes(xintercept = g_mean_path_length),
+             color = "red", linetype = "dashed", size = 1) +
+  labs(title = "Histogram of Average Path Length Differences",
+       x = "Difference in Average Path Length",
+       y = "Frequency") +
+  theme_minimal()
+
+# Modularity histogram
+hist_modularity_data <- data.frame(Modularity_Difference = modularity_random)
+ggplot(hist_modularity_data, aes(x = Modularity_Difference)) +
+  geom_histogram(binwidth = 0.01, fill = "blue", color = "black", alpha = 0.7) +
+  geom_vline(aes(xintercept = g_modularity),
+             color = "red", linetype = "dashed", size = 1) +
+  labs(title = "Histogram of Modularity in Random Networks",
+       x = "Modularity",
+       y = "Frequency") +
+  theme_minimal()
+
+
