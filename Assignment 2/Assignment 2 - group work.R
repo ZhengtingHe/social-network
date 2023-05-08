@@ -32,6 +32,12 @@ datalarge.igraph <- graph_from_data_frame(subgraph_df , directed = FALSE)
 is.weighted(datalarge.igraph)# weight: number of the scenes where they appear together
 is.directed(datalarge.igraph)
 
+datalarge.igraph
+
+#density
+density.manual <- 170 / ((39*(39-1))/2)
+density.manual
+
 edge.attributes(datalarge.igraph)
 vertex_attr(datalarge.igraph)
 
@@ -51,8 +57,8 @@ g <- ggraph(datalarge.igraph, layout = 'fr') + # layout algorithm
   geom_node_point(color = "plum4", size = 2) +
   geom_node_text(aes(label = name), color = "plum4", size = 3.5, vjust = -0.5) +
   theme_graph()  +
-  labs(title = "The co-emergence network of characters in Star Wars IV-VI episodes") +
-  scale_edge_width_continuous("The times of co-emergence")
+  labs(title = "The co-appearance network of characters in Star Wars IV-VI episodes") +
+  scale_edge_width_continuous("The times of co-appearance")
 
 g
 
@@ -70,7 +76,7 @@ g +
   geom_node_point(aes(color = factor(member.eb)), size = 2) +
   geom_node_text(aes(label = name, color = factor(member.eb)),
                  size = 3.5, vjust = -0.5) +
-  labs(title = "The community detection in Star Wars IV-VI: Edge-Betweenness") +
+  labs(title = "The community detection in Star Wars IV-VI by Edge-Betweenness") +
   scale_color_discrete("Communities") +
   guides(color = guide_legend(order = 1), 
          size = guide_legend(order = 2))
@@ -94,7 +100,7 @@ g +
   geom_node_point(aes(color = factor(member.wt)), size = 2) +
   geom_node_text(aes(label = name, color = factor(member.wt)),
                  size = 3.5, vjust = -0.5) +
-  labs(title = "The community detection in Star Wars IV-VI: Walktrap") +
+  labs(title = "The community detection in Star Wars IV-VI by Walktrap") +
   scale_color_discrete("Communities") +
   guides(color = guide_legend(order = 1), 
          size = guide_legend(order = 2))
@@ -119,7 +125,7 @@ g +
   geom_node_point(aes(color = factor(member.lv)), size = 2) +
   geom_node_text(aes(label = name, color = factor(member.lv)),
                  size = 3.5, vjust = -0.5) +
-  labs(title = "The community detection in Star Wars IV-VI: Lauvain") +
+  labs(title = "The community detection in Star Wars IV-VI by Lauvain") +
   scale_color_discrete("Communities") +
   guides(color = guide_legend(order = 1), 
          size = guide_legend(order = 2))
@@ -140,8 +146,8 @@ g5 <- ggraph(data5.igraph, layout = 'fr') + # layout algorithm
   geom_node_point(color = "blue4", size = 2) +
   geom_node_text(aes(label = name), color = "blue4", size = 3.5, vjust = -0.5) +
   theme_graph()  +
-  labs(title = "The co-emergence network of characters in Star Wars V") +
-  scale_edge_width_continuous("The times of co-emergence")
+  labs(title = "The co-appearance network of characters in Star Wars V") +
+  scale_edge_width_continuous("The times of co-appearance")
 g5
 
 eb5 <- cluster_edge_betweenness(data5.igraph)
@@ -155,10 +161,14 @@ g5 +
   geom_node_point(aes(color = factor(member.eb5)), size = 2) +
   geom_node_text(aes(label = name, color = factor(member.eb5)),
                  size = 3.5, vjust = -0.5) +
-  labs(title = "The community detection in Star Wars V: Edge-Betweenness") +
+  labs(title = "The community detection in Star Wars V by Edge-Betweenness") +
   scale_color_discrete("Communities") +
   guides(color = guide_legend(order = 1), 
          size = guide_legend(order = 2))
 
 plot_dendrogram(eb5)
+
+
+#### Task 2b: conditional uniform graph tests ####
+# feature in 1a: transtivity
 
